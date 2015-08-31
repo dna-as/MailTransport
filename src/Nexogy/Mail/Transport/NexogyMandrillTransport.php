@@ -19,7 +19,6 @@ class NexogyMandrillTransport extends \Illuminate\Mail\Transport\MandrillTranspo
 			],
 		]);
 
-		\Log::info($response->json());
-		return $response;
+		return $response->json();
 	}
 }
