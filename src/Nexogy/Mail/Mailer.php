@@ -2,7 +2,7 @@
 
 class Mailer extends \Illuminate\Mail\Mailer {
 
-	
+
 	public function send($view, array $data, $callback)
 	{
 		// First we need to parse the view, which could either be a string or an array
@@ -24,7 +24,7 @@ class Mailer extends \Illuminate\Mail\Mailer {
 		return $this->sendSwiftMessage($message);
 	}
 
-	
+
 
 	/**
 	 * Send a Swift Message instance.
@@ -34,18 +34,17 @@ class Mailer extends \Illuminate\Mail\Mailer {
 	 */
 	protected function sendSwiftMessage($message)
 	{
-		if ($this->events)
-		{
-			$this->events->fire('mailer.sending', array($message));
-		}
+		if ($this->events) $this->events->fire('mailer.sending', array($message));
 
 		if ( ! $this->pretending)
 		{
-			return $this->swift->send($message, $this->failedRecipients);
+			$response = $this->swift->send($message, $this->failedRecipients);
+			if($this->events) $this->events->fire('mailer.sent', array($message, $response));
+			return $response;
 		}
 		elseif (isset($this->logger))
 		{
-			$this->logMessage($message);
+			return $this->logMessage($message);
 		}
 	}
 }
