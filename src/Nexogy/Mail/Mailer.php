@@ -44,7 +44,7 @@ class Mailer extends \Illuminate\Mail\Mailer {
 		}
 		elseif (isset($this->logger))
 		{
-			$this->logMessage($message);
+			return $this->logMessage($message);
 		}
 	}
 }
