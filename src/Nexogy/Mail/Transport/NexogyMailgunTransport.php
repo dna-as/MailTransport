@@ -2,6 +2,7 @@
 
 use Swift_Transport;
 use Swift_Mime_Message;
+use GuzzleHttp\Post\PostFile;
 
 class NexogyMailgunTransport extends \Illuminate\Mail\Transport\MailgunTransport implements Swift_Transport {
 	/**
