@@ -4,6 +4,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Mail\Transport\LogTransport;
 use Illuminate\Mail\Transport\MailgunTransport;
 use Illuminate\Mail\Transport\MandrillTransport;
+use Nexogy\Mail\Transport\NexogyMailgunTransport;
 use Nexogy\Mail\Transport\NexogyMandrillTransport;
 use Swift_SendmailTransport as SendmailTransport;
 
@@ -71,6 +72,8 @@ class MailServiceProvider extends \Illuminate\Mail\MailServiceProvider {
 				return $this->registerMailTransport($config);
 			case 'mailgun':
 				return $this->registerMailgunTransport($config);
+			case 'nexogy-mailgun':
+				return $this->registerNexogyMailgunTransport($config);
 			case 'mandrill':
 				return $this->registerMandrillTransport($config);
 			case 'nexogy-mandrill':
@@ -83,7 +86,7 @@ class MailServiceProvider extends \Illuminate\Mail\MailServiceProvider {
 	}
 
 	/**
-	 * Register the Mandrill Swift Transport instance.
+	 * Register the Nexogy-Mandrill Swift Transport instance.
 	 *
 	 * @param  array  $config
 	 * @return void
@@ -94,6 +97,21 @@ class MailServiceProvider extends \Illuminate\Mail\MailServiceProvider {
 		$this->app->bindShared('swift.transport', function() use ($mandrill)
 		{
 			return new NexogyMandrillTransport($mandrill['secret']);
+		});
+	}
+
+	/**
+	 * Register the Nexogy-Mailgun Swift Transport instance.
+	 *
+	 * @param  array  $config
+	 * @return void
+	 */
+	protected function registerNexogyMailgunTransport($config)
+	{
+		$mailgun = $this->app['config']->get('services.mailgun', array());
+		$this->app->bindShared('swift.transport', function() use ($mailgun)
+		{
+			return new NexogyMailgunTransport($mailgun['secret'], $mailgun['domain']);
 		});
 	}
 }
