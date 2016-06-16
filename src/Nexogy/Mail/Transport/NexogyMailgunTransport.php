@@ -11,10 +11,13 @@ class NexogyMailgunTransport extends \Illuminate\Mail\Transport\MailgunTransport
 	public function send(Swift_Mime_Message $message, &$failedRecipients = null)
 	{
 		$client = $this->getHttpClient();
+		
+		$to = $this->getTo($message);
+		$message->setBcc(null);
 
 		$response = $client->post($this->url, ['auth' => ['api', $this->key],
 			'body' => [
-			   'bcc' => $this->getTo($message),
+			   'to' => $to,
 			   'message' => new PostFile('message', (string) $message),
 			],
 		]);
