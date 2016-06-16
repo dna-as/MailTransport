@@ -14,7 +14,7 @@ class NexogyMailgunTransport extends \Illuminate\Mail\Transport\MailgunTransport
 
 		$response = $client->post($this->url, ['auth' => ['api', $this->key],
 			'body' => [
-			   'to' => $this->getTo($message),
+			   'bcc' => $this->getTo($message),
 			   'message' => new PostFile('message', (string) $message),
 			],
 		]);
