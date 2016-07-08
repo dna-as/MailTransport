@@ -13,12 +13,14 @@ class NexogyMailgunTransport extends \Illuminate\Mail\Transport\MailgunTransport
 		$client = $this->getHttpClient();
 		
 		$to = $this->getTo($message);
-		$message->setBcc(null);
+		
+		$copyMessage = clone $message;
+		$copyMessage->setBcc(null);
 
 		$response = $client->post($this->url, ['auth' => ['api', $this->key],
 			'body' => [
 			   'to' => $to,
-			   'message' => new PostFile('message', (string) $message),
+			   'message' => new PostFile('message', (string) $copyMessage),
 			],
 		]);
 
