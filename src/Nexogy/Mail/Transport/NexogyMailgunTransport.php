@@ -16,8 +16,14 @@ class NexogyMailgunTransport extends \Illuminate\Mail\Transport\MailgunTransport
 		
 		$copyMessage = clone $message;
 		$copyMessage->setBcc(null);
+		
+		$domain = substr($this->url, strrpos($this->url, '/') + 1);
+		$fromDomain = array_keys($this->getFrom())[0];
+		$fromDomain = substr($fromDomain, strrpos($fromDomain, '@') + 1);
+		
+		$from = str_replace($domain, $fromDomain, $this->url);
 
-		$response = $client->post($this->url, ['auth' => ['api', $this->key],
+		$response = $client->post($from, ['auth' => ['api', $this->key],
 			'body' => [
 			   'to' => $to,
 			   'message' => new PostFile('message', (string) $copyMessage),
