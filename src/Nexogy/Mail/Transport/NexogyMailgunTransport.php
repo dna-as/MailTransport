@@ -19,6 +19,9 @@ class NexogyMailgunTransport extends \Illuminate\Mail\Transport\MailgunTransport
 		
 		$fromDomain = array_keys($message->getFrom())[0];
 		$fromDomain = substr($fromDomain, strrpos($fromDomain, '@') + 1);
+		if($fromDomain != 'rdsgi.com')
+			$fromDomain = 'nexogy.com';
+		
 		$this->setDomain($fromDomain);
 
 		$response = $client->post($this->url, ['auth' => ['api', $this->key],
