@@ -26,7 +26,7 @@ class NexogyMailgunTransport extends \Illuminate\Mail\Transport\MailgunTransport
 		$email = array_keys($message->getFrom())[0];
 		if(substr($email, 0, 15) == $token) {
 			$email = str_replace("use_nexogy_com_", "", $email);
-			$message->setFrom($email);
+			$copyMessage->setFrom($email);
 			$this->setDomain("nexogy.com");
 		}
 
