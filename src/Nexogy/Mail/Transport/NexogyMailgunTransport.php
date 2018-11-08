@@ -20,16 +20,6 @@ class NexogyMailgunTransport extends \Illuminate\Mail\Transport\MailgunTransport
 		$fromDomain = array_keys($message->getFrom())[0];
 		$fromDomain = substr($fromDomain, strrpos($fromDomain, '@') + 1);
 		
-		$this->setDomain($fromDomain);
-
-		$token = "use_nexogy_com_";
-		$email = array_keys($message->getFrom())[0];
-		if(substr($email, 0, 15) == $token) {
-			$email = str_replace("use_nexogy_com_", "", $email);
-			$copyMessage->setFrom($email);
-			$this->setDomain("nexogy.com");
-		}
-
 		$response = $client->post($this->url, ['auth' => ['api', $this->key],
 			'body' => [
 			   'to' => $to,
